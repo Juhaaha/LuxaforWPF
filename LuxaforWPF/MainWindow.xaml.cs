@@ -274,7 +274,7 @@ namespace LuxaforWPF
                 listenPhone = false;
                 prevColor = new LuxaforSharp.Color(255, 0, 0);
                 
-               // System.DrwaSolidBrush solid =new SolidBrush(Color.FromArgb())
+               
                 dev.SetColor(LedTarget.All, prevColor);
                 tbStatusbar.Text = "Phone listening off. Status: Busy";
             }

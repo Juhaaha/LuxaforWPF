@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:LuxaforWPF"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="LuxaforWPF" Height="335" Width="304.356"
+        Title="LuxaforWPF" Height="335" Width="314.356"
         Icon="Icojam-Onebit-Traffic-lights.ico">
     <Window.Resources>
         <Storyboard x:Key="sbCall">
@@ -22,7 +22,7 @@
             </ColorAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
-    <Grid Name="mainGrid" Margin="0,0,-32,-19" >
+    <Grid Name="mainGrid"  >
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="Black"/>
