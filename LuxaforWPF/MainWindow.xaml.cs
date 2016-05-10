@@ -103,22 +103,22 @@ namespace LuxaforWPF
 
             try
             {
-                string line = readLine();
-                if (!String.IsNullOrEmpty(line))
-                {
-                       // string temp = "";
+                    string line = readLine();
+                    if (!String.IsNullOrEmpty(line))
+                    {
+                        // string temp = "";
                         string[] c = null;
                         if (line != null && line.Length > 0 && line.Any(Char.IsDigit))
                         {
                             c = line.Trim().Split(',');
 
-                            if (c != null && c.Length == 5)
+                            if (listenPhone && c != null && c.Length == 5)
                             {
-                            prevColor = new LuxaforSharp.Color(Convert.ToByte(c[0]), Convert.ToByte(c[1]), Convert.ToByte(c[2]));
-                            dev.SetColor(LedTarget.All, prevColor);
-                            dev.Blink(LedTarget.All, prevColor, Convert.ToByte(c[3]), Convert.ToByte(c[4]));
+                                prevColor = new LuxaforSharp.Color(Convert.ToByte(c[0]), Convert.ToByte(c[1]), Convert.ToByte(c[2]));
+                                dev.SetColor(LedTarget.All, prevColor);
+                                dev.Blink(LedTarget.All, prevColor, Convert.ToByte(c[3]), Convert.ToByte(c[4]));
 
-                            if (this.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
+                                if (this.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
                                 {
                                     this.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
                                         new Action(
@@ -127,10 +127,10 @@ namespace LuxaforWPF
                                                 System.Windows.Media.Color from = System.Windows.Media.Color.FromRgb(prevColor.Red, prevColor.Green, prevColor.Blue);
                                                 System.Windows.Media.Color to = Colors.Gray;
                                                 var colorAnimation = new ColorAnimation(from, to, TimeSpan.FromSeconds(1));
-                                                
+
                                                 Storyboard sb = new Storyboard();
                                                 sb.Duration = TimeSpan.FromSeconds(1);
-                                                sb.RepeatBehavior = new RepeatBehavior(Convert.ToDouble(c[4])+1);
+                                                sb.RepeatBehavior = new RepeatBehavior(Convert.ToDouble(c[4]) + 1);
                                                 Storyboard.SetTarget(colorAnimation, ecStatus);
                                                 Storyboard.SetTargetProperty(colorAnimation, new PropertyPath("Fill.Color"));
                                                 sb.Children.Add(colorAnimation);
@@ -139,55 +139,56 @@ namespace LuxaforWPF
                                             }
                                             ));
                                 }
-                          
 
-                            // temp = DateTime.Now.ToString("yyyyMMddHHmmssffff") + " Color Changed to " + prevColor.Red + ", " + prevColor.Green + ", " + prevColor.Blue;                 
-                        }
-                            else if (c != null && c.Length == 3)
-                            {
-                               
 
-                            if(this.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
-                            {
-                                this.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
-                                    new Action(
-                                        delegate ()
-                                        {
-                                            SolidColorBrush brush = new SolidColorBrush();
-                                            brush.Color = System.Windows.Media.Color.FromRgb(Convert.ToByte(c[0]), Convert.ToByte(c[1]), Convert.ToByte(c[2]));
-                                            Application.Current.Resources["statusColor"] = brush;
-                                            ecStatus.Fill = (SolidColorBrush)Application.Current.Resources["statusColor"];
-                                        }
-                                        ));
+                                // temp = DateTime.Now.ToString("yyyyMMddHHmmssffff") + " Color Changed to " + prevColor.Red + ", " + prevColor.Green + ", " + prevColor.Blue;                 
                             }
-                            prevColor = new LuxaforSharp.Color(Convert.ToByte(c[0]), Convert.ToByte(c[1]), Convert.ToByte(c[2]));
-                           // foreach(var item in deviceList)
-                          //  {
+                            else if (listenPhone && c != null && c.Length == 3)
+                            {
+
+
+                                if (this.Dispatcher.Thread != System.Threading.Thread.CurrentThread)
+                                {
+                                    this.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal,
+                                        new Action(
+                                            delegate ()
+                                            {
+                                                SolidColorBrush brush = new SolidColorBrush();
+                                                brush.Color = System.Windows.Media.Color.FromRgb(Convert.ToByte(c[0]), Convert.ToByte(c[1]), Convert.ToByte(c[2]));
+                                                Application.Current.Resources["statusColor"] = brush;
+                                                ecStatus.Fill = (SolidColorBrush)Application.Current.Resources["statusColor"];
+                                            }
+                                            ));
+                                }
+                                prevColor = new LuxaforSharp.Color(Convert.ToByte(c[0]), Convert.ToByte(c[1]), Convert.ToByte(c[2]));
+                                // foreach(var item in deviceList)
+                                //  {
                                 dev.SetColor(LedTarget.All, prevColor);
-                          //  }
-                            //Device device = (Device)dev;
-                           // MessageBox.Show(device.DevicePath);
-                           // Device device2 = (Device)deviceList.ElementAt(1);
-                           // MessageBox.Show("2nd Device " + device2.DevicePath);
-                            //MessageBox.Show(deviceList[1]);
-                          //  dev.SetColor(LedTarget.All, prevColor);       
+                                //  }
+                                //Device device = (Device)dev;
+                                // MessageBox.Show(device.DevicePath);
+                                // Device device2 = (Device)deviceList.ElementAt(1);
+                                // MessageBox.Show("2nd Device " + device2.DevicePath);
+                                //MessageBox.Show(deviceList[1]);
+                                //  dev.SetColor(LedTarget.All, prevColor);       
+                            }
+
                         }
-           
-                     }
-                    else if (line.ToLower() == "status")
-                    {
-                       var stream = new FileStream(@Properties.Settings.Default.status, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
-                        string a =DateTime.Now.ToString("yyyyMMddHHmmssffff")+ ": Color : " + prevColor.Red + "," + prevColor.Green + "," + prevColor.Blue + ". Status :";
-                        if (listenPhone && dev != null)
-                            a += " Listening phone.";
-                        if (!listenPhone)
-                            a += " Not listening phone.";
-                        else if (dev == null)
-                            a += "No Luxafor- device detected.";
-                        using (var writer = new StreamWriter(stream))
-                            writer.WriteLine(a);
+                        else if (line.ToLower() == "status")
+                        {
+                            var stream = new FileStream(@Properties.Settings.Default.status, FileMode.Append, FileAccess.Write, FileShare.ReadWrite);
+                            string a = DateTime.Now.ToString("yyyyMMddHHmmssffff") + ": Color : " + prevColor.Red + "," + prevColor.Green + "," + prevColor.Blue + ". Status :";
+                            if (listenPhone && dev != null)
+                                a += " Listening phone.";
+                            if (!listenPhone)
+                                a += " Not listening phone.";
+                            else if (dev == null)
+                                a += "No Luxafor- device detected.";
+                            using (var writer = new StreamWriter(stream))
+                                writer.WriteLine(a);
+                        }
                     }
-                }
+                
             }
             catch (Exception ex)
             {
